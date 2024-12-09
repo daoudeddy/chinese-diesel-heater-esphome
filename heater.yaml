@@ -1,0 +1,87 @@
+
+esphome:
+  includes: heater.h
+
+uart:
+  baud_rate: 25000
+  rx_pin: GPIO13
+  id: heater_serial
+  rx_buffer_size: 512
+
+sensor:
+  - platform: template
+    name: "Set Temperature"
+    id: set_temperature
+    unit_of_measurement: "°C"
+    device_class: temperature
+  - platform: template
+    name: "Fan Speed"
+    id: fan_speed
+    unit_of_measurement: "RPM"
+  - platform: template
+    name: "Supply Voltage"
+    id: supply_voltage
+    unit_of_measurement: "V"
+    device_class: voltage
+  - platform: template
+    name: "Heat Exchanger Temperature"
+    id: heat_exchanger_temp
+    unit_of_measurement: "°C"
+    device_class: temperature
+  - platform: template
+    name: "Glow Plug Voltage"
+    id: glow_plug_voltage
+    unit_of_measurement: "V"
+    device_class: voltage
+  - platform: template
+    name: "Glow Plug Current"
+    id: glow_plug_current
+    unit_of_measurement: "A"
+    device_class: current
+  - platform: template
+    name: "Pump Frequency"
+    id: pump_frequency
+    unit_of_measurement: "Hz"
+    device_class: frequency
+  - platform: template
+    name: "Desired Temperature"
+    id: desired_temp
+    unit_of_measurement: "°C"
+    device_class: temperature
+  - platform: template
+    name: "Fan Voltage"
+    id: fan_voltage
+    unit_of_measurement: "V"
+    device_class: voltage
+
+binary_sensor:
+  - platform: template
+    name: "On/Off State"
+    id: on_off_state
+    device_class: power
+text_sensor:
+  - platform: template
+    id: run_state_text
+    name: "Run State Text"
+  - platform: template
+    name: "Error Code Text"
+    id: error_code_text
+
+custom_component:
+  - lambda: |-
+      auto heater = new HeaterUart(
+        id(heater_serial),
+        id(set_temperature),
+        id(fan_speed),
+        id(supply_voltage),
+        id(heat_exchanger_temp),
+        id(glow_plug_voltage),
+        id(glow_plug_current),
+        id(pump_frequency),
+        id(desired_temp),
+        id(on_off_state),
+        id(fan_voltage),
+        id(run_state_text),
+        id(error_code_text)
+      );
+      return {heater};
